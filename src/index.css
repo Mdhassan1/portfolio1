@@ -1,0 +1,161 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-display: "Archivo", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  --color-obsidian: #090B0A;
+  --color-lime-electric: #C5FF4A;
+}
+
+/* High Contrast Light Theme (Default when .dark is absent) */
+:root {
+  --bg-canvas: #F6F7F4;
+  --bg-surface: #FFFFFF;
+  --bg-surface-alt: #ECEEE9;
+  --bg-surface-hover: #E3E6DF;
+  --bg-artwork: #EFF1EC;
+  --text-primary: #090B0A;
+  --text-secondary: #262B28;
+  --text-muted: #4C534F;
+  --border-hairline: rgba(9, 11, 10, 0.14);
+  --border-strong: rgba(9, 11, 10, 0.32);
+  --accent-ink: #345600;
+  --accent-surface: #C5FF4A;
+  --grid-line: rgba(9, 11, 10, 0.065);
+  --nav-bg: rgba(246, 247, 244, 0.90);
+  color-scheme: light;
+}
+
+/* Deep Charcoal Theme */
+.dark {
+  --bg-canvas: #090B0A;
+  --bg-surface: #0D100F;
+  --bg-surface-alt: #0B0E0D;
+  --bg-surface-hover: #141816;
+  --bg-artwork: #0A0D0C;
+  --text-primary: #F4F6F5;
+  --text-secondary: #C8CECA;
+  --text-muted: #939A96;
+  --border-hairline: rgba(244, 246, 245, 0.09);
+  --border-strong: rgba(244, 246, 245, 0.24);
+  --accent-ink: #C5FF4A;
+  --accent-surface: #C5FF4A;
+  --grid-line: rgba(244, 246, 245, 0.035);
+  --nav-bg: rgba(9, 11, 10, 0.88);
+  color-scheme: dark;
+}
+
+@layer base {
+  html {
+    background-color: var(--bg-canvas);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    scroll-behavior: smooth;
+    overflow-x: clip;
+  }
+
+  body {
+    background-color: var(--bg-canvas);
+    color: var(--text-primary);
+    overflow-x: clip;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    text-wrap: balance;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent-ink);
+    outline-offset: 3px;
+  }
+}
+
+/* Subtle architectural grid canvas with compositor-only slow drift */
+.tech-grid-bg {
+  background-image:
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+@keyframes grid-drift {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(64px, 64px, 0);
+  }
+}
+
+.tech-grid-animated {
+  animation: grid-drift 28s linear infinite;
+  will-change: transform;
+}
+
+/* Subtle 3D architectural stage */
+.architect-perspective {
+  perspective: 1100px;
+}
+
+.architect-cube-stage {
+  transform-style: preserve-3d;
+}
+
+@keyframes slow-orbit {
+  0% {
+    transform: rotateX(-18deg) rotateY(22deg) rotateZ(0deg);
+  }
+  50% {
+    transform: rotateX(-12deg) rotateY(48deg) rotateZ(2deg);
+  }
+  100% {
+    transform: rotateX(-18deg) rotateY(22deg) rotateZ(0deg);
+  }
+}
+
+.architect-cube-orbit {
+  transform-style: preserve-3d;
+  animation: slow-orbit 16s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+}
+
+@keyframes float-plane {
+  0%, 100% {
+    transform: translate3d(0, 0px, 0);
+  }
+  50% {
+    transform: translate3d(0, -10px, 0);
+  }
+}
+
+.float-plane-slow {
+  animation: float-plane 6s ease-in-out infinite;
+}
+
+.float-plane-delayed {
+  animation: float-plane 7.5s ease-in-out 1.2s infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .tech-grid-animated,
+  .architect-cube-orbit,
+  .float-plane-slow,
+  .float-plane-delayed {
+    animation: none !important;
+    transform: none !important;
+  }
+
+  .architect-cube-orbit {
+    transform: rotateX(-16deg) rotateY(28deg) !important;
+  }
+}
